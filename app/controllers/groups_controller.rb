@@ -1,5 +1,5 @@
 class GroupsController < ApplicationController
-  before_action :authenticate_user! 
+  before_action :authenticate_user! , only: [:new, :create]
 
    def index
      @groups = Group.all
@@ -19,6 +19,7 @@ class GroupsController < ApplicationController
 
    def  create
      @group = Group.new (group_params)
+     @group.user = current_user
 
      if @group.save
        redirect_to groups_path
@@ -31,7 +32,7 @@ class GroupsController < ApplicationController
    def update
      @group = Group.find(params[:id])
      if @group.update(group_params)
-       redirect_to group_path, notice: "Update Sucess"
+       redirect_to groups_path, notice: "Update Sucess"
      else
        render :edit
      end
